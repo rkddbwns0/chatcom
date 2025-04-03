@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/swagger": "^11.1.0",
+    "@nestjs/typeorm": "^11.0.0",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "crypto": "^1.0.1",
+    "postgre": "^0.1.8"
+  },
+  "devDependencies": {
+    "start-server-webpack-plugin": "^2.2.5",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
