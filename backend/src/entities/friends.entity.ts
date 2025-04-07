@@ -15,6 +15,9 @@ export class FriendsEntity {
     @JoinColumn({name: 'friend_id'})
     friend_id: UserEntity;
 
+    @Column({type: 'varchar', length: 50, nullable: false})
+    alias: string;
+
     @Column({type: 'boolean', default: false})
     with_friend_state: boolean;
 

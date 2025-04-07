@@ -81,13 +81,15 @@ export class FriendsService {
                     const addFriend1 = responseRepo.create({
                         user_id: responseFriendDto.send_id,
                         friend_id: responseFriendDto.receiver_id,
-                        with_friend_state: true
+                        with_friend_state: true,
+                        alias: findRequest.receiver_id.nickname
                     });
 
                     const addFriend2 = responseRepo.create({
                         user_id: responseFriendDto.receiver_id,
                         friend_id: responseFriendDto.send_id,
-                        with_friend_state: true
+                        with_friend_state: true,
+                        alias: findRequest.send_id.nickname
                     });
 
                     await responseRepo.save([addFriend1, addFriend2])

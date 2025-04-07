@@ -43,5 +43,4 @@ export class UserEntity {
 
     @OneToMany(() => Friends_requestsEntity, (friends_requests) => friends_requests.receiver_id)
     receiver_id: Friends_requestsEntity[];
-
 }

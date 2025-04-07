@@ -12,7 +12,6 @@ async function bootstrap() {
     origin: true
   });
 
-
   const config = new DocumentBuilder()
       .setTitle('API Documentation')
       .setDescription('API')

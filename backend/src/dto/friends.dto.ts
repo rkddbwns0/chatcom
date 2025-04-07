@@ -29,4 +29,9 @@ export class ResponseFriendDto {
     @IsNotEmpty()
     @IsNumber()
     receiver_id: UserEntity;
+
+    @ApiProperty({description: "친구 별명 -> defalut: 사용자 닉네임으로.", type: "string", nullable: false})
+    @IsNotEmpty()
+    @IsString()
+    alias: string;
 }

@@ -21,8 +21,6 @@ export class UserService {
             await this.duplicateNickname(createUserDto.nickname);
             const hashing = await this.hashData(createUserDto.password);
             const encrypt = await this.encryptData(createUserDto.resident_num)
-            console.log(typeof encrypt)
-            console.log(hashing)
             createUserDto.password = hashing
             createUserDto.resident_num = stringify(encrypt)
 
