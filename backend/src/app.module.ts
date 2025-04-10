@@ -13,6 +13,8 @@ import {Friends_requestsEntity} from "./entities/friends_requests.entity";
 import {ChatRoomModule} from "./chat_rooms/chat_room.modules";
 import {MongooseModule} from "@nestjs/mongoose";
 import {ChatLogModule} from "./chat_log/chat_log.module";
+import { ChatGateway } from './chat/chat.gateway';
+import {ChatGatewayModule} from "./chat/gateway.module";
 
 @Module({
   imports: [
@@ -40,7 +42,8 @@ import {ChatLogModule} from "./chat_log/chat_log.module";
       UserModule,
       FriendsModule,
       ChatRoomModule,
-      ChatLogModule
+      ChatLogModule,
+      ChatGatewayModule
   ],
   controllers: [AppController],
   providers: [AppService],

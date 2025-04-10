@@ -14,6 +14,7 @@ import {ChatLogController} from "./chat_log.controller";
         MongooseModule.forFeature([{name: ChatLog.name, schema: ChatLogSchema}])],
     providers: [ChatLogService],
     controllers: [ChatLogController],
+    exports: [ChatLogService],
 })
 
 export class ChatLogModule {}

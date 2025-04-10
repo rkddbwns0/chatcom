@@ -54,7 +54,7 @@ export class ChatLogService {
         }
     }
 
-    async createChatLog(createChatLogDto: CreateChatLogDto) {
+    async sendMessage(createChatLogDto: CreateChatLogDto) {
         try {
             const room = await this.findRoomId(createChatLogDto.room_id);
             const user = await this.findUserId(room!, createChatLogDto.user_id);

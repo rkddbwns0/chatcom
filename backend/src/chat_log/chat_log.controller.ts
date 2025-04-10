@@ -9,11 +9,11 @@ export class ChatLogController {
 
     @Post('/createChatLog')
     async createChatLog(@Body() createChatLogDto: CreateChatLogDto, @Res() res: Response) {
-        try {
-            const result = await this.chatLogService.createChatLog(createChatLogDto);
-            res.status(200).json(result)
-        } catch (e) {
-            console.error(e);
-        }
+        // try {
+        //     const result = await this.chatLogService.createChatLog(createChatLogDto);
+        //     res.status(200).json(result)
+        // } catch (e) {
+        //     console.error(e);
+        // }
     }
 }
