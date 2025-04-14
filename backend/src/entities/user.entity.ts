@@ -2,6 +2,7 @@ import {Column, Entity,  OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {FriendsEntity} from "./friends.entity";
 import {RoomParticipantsEntity} from "./room_participants.entity";
 import {Friends_requestsEntity} from "./friends_requests.entity";
+import {UserTokenEntity} from "./user_token.entity";
 
 @Entity({name: 'users'})
 export class UserEntity {
@@ -28,6 +29,9 @@ export class UserEntity {
 
     @Column({type: 'date', default: () => 'CURRENT_TIMESTAMP'})
     created_at: Date;
+
+    @OneToMany(() => UserTokenEntity, (userToken) => userToken.user_id, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+    userToken: UserTokenEntity;
 
     @OneToMany(() => FriendsEntity, (friends) => friends.user_id, { onDelete: 'CASCADE' })
     sentFriendRequest: FriendsEntity[];

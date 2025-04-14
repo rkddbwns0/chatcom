@@ -15,6 +15,7 @@ import {MongooseModule} from "@nestjs/mongoose";
 import {ChatLogModule} from "./chat_log/chat_log.module";
 import { ChatGateway } from './chat/chat.gateway';
 import {ChatGatewayModule} from "./chat/gateway.module";
+import {UserTokenEntity} from "./entities/user_token.entity";
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import {ChatGatewayModule} from "./chat/gateway.module";
               username: configService.get<string>('DB_USERNAME'),
               password: configService.get<string>('DB_PASSWORD'),
               database: configService.get<string>('DB_NAME'),
-              entities: [UserEntity, FriendsEntity, Chat_roomEntity, RoomParticipantsEntity, Friends_requestsEntity]
+              entities: [UserEntity, FriendsEntity, Chat_roomEntity, RoomParticipantsEntity, Friends_requestsEntity, UserTokenEntity]
           }),
       }),
       MongooseModule.forRootAsync({
