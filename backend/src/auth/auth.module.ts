@@ -6,6 +6,9 @@ import {ConfigService} from "@nestjs/config";
 import {AuthService} from "./auth.service";
 import {AuthController} from "./auth.controller";
 import {UserTokenEntity} from "../entities/user_token.entity";
+import {AuthStrategy} from "./auth.stategy";
+import {APP_GUARD} from "@nestjs/core";
+import {JwtAuthGuard} from "./auth.guard";
 
 @Module({
     imports: [
@@ -17,9 +20,9 @@ import {UserTokenEntity} from "../entities/user_token.entity";
                 signOptions: {expiresIn: '7h'}
             }),
             inject: [ConfigService]
-        })
+        }),
     ],
-    providers: [AuthService],
+    providers: [AuthService, AuthStrategy, {provide: APP_GUARD, useClass: JwtAuthGuard}],
     controllers: [AuthController],
 })
 

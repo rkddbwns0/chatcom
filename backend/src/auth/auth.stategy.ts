@@ -1,24 +1,31 @@
 import {PassportStrategy} from "@nestjs/passport";
-import {Strategy, ExtraJwt} from  'passport-jwt'
+import {Strategy, ExtractJwt} from  'passport-jwt'
 import {ConfigService} from "@nestjs/config";
+import {Injectable, UnauthorizedException} from "@nestjs/common";
 
-export class AuthStategy extends PassportStrategy (
+@Injectable()
+export class AuthStrategy extends PassportStrategy (
     Strategy,
     'jwt-service'
 ) {
     constructor(private readonly configService: ConfigService) {
+        const secretKey = configService.get<string>('JWT_SECRET_KEY');
+        if (!secretKey) {
+            throw new Error('키를 찾을 수 없습니다.')
+        }
         super({
-            secretOrKey: configService.get<string>('JWT_SECRET_KEY'),
+            secretOrKey: secretKey,
             ignoreExpiration: false,
-            jwtFromRequest: ExtraJwt.fromExtractor([
-                (request) => {
-                    return request?.cookies.tokens
-                }
+            jwtFromRequest: ExtractJwt.fromExtractors([
+                (request) => request?.cookies?.user_access_token
             ])
         });
     }
 
     async validate(payload: any) {
+        if (!payload) {
+            throw new UnauthorizedException('인증 오류');
+        }
         return {
             user_id: payload.user_id,
             name: payload.name,

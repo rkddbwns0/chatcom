@@ -16,6 +16,10 @@ import {ChatLogModule} from "./chat_log/chat_log.module";
 import { ChatGateway } from './chat/chat.gateway';
 import {ChatGatewayModule} from "./chat/gateway.module";
 import {UserTokenEntity} from "./entities/user_token.entity";
+import {APP_GUARD} from "@nestjs/core";
+import {JwtAuthGuard} from "./auth/auth.guard";
+import {AuthModule} from "./auth/auth.module";
+import {AuthStrategy} from "./auth/auth.stategy";
 
 @Module({
   imports: [
@@ -44,9 +48,10 @@ import {UserTokenEntity} from "./entities/user_token.entity";
       FriendsModule,
       ChatRoomModule,
       ChatLogModule,
-      ChatGatewayModule
+      ChatGatewayModule,
+      AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}

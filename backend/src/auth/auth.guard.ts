@@ -4,11 +4,13 @@ import {JwtService} from "@nestjs/jwt";
 import {ConfigService} from "@nestjs/config";
 import {InjectRepository} from "@nestjs/typeorm";
 import {UserTokenEntity} from "../entities/user_token.entity";
-import {Repository} from "typeorm";
-import {response} from "express";
+import {Not, Repository} from "typeorm";
+import {Response, response} from "express";
+import {IS_PUBLIC_KEY} from "./decorator/public.decorator";
+import {AuthGuard} from "@nestjs/passport";
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivate {
     constructor(
         private reflector: Reflector,
         private jwtService: JwtService,
@@ -16,10 +18,10 @@ export class AuthGuard implements CanActivate {
 
         @InjectRepository(UserTokenEntity)
         private readonly userToken: Repository<UserTokenEntity>
-    ) {}
+    ) {super()}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const isPublic = this.reflector.getAllAndOverride('isPublic', [
+        const isPublic = this.reflector.getAllAndOverride(IS_PUBLIC_KEY, [
             context.getClass(),
             context.getHandler()
         ]);
@@ -31,14 +33,49 @@ export class AuthGuard implements CanActivate {
         const response = context.switchToHttp().getResponse();
         const accessToken = request.cooikes['user_access_token'];
         const refreshToken = request.cooikes['user_refresh_token'];
-        const user = request.body.user || request.params.user;
+        const user = request.body.user_id|| request.params.user_id;
 
-        if (!accessToken) {
-            throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.');
+        if (!accessToken || !refreshToken) {
+            this.clearAuthCookies(response)
+            throw new UnauthorizedException('로그인이 필요합니다.');
         }
 
-        await this.checkAccessToken(accessToken)
-        await this.checkRefreshToken(user, refreshToken)
+        const access_payload = await this.checkAccessToken(accessToken)
+        await this.checkRefreshToken(user, refreshToken, response)
+
+        if(!(Number(user) === access_payload.user_id)) {
+            this.clearAuthCookies(response)
+            throw new UnauthorizedException('정보가 일치하지 않습니다.')
+        }
+
+        request.user = access_payload;
+
+        try {
+            const today = new Date();
+            const store_token = await this.userToken.findOne({
+                where: {
+                    user_id: request.user_id,
+                    token: refreshToken
+                }
+            });
+            if (!store_token) {
+                await this.userToken.delete({
+                    user_id: request.user_id,
+                    token: Not(refreshToken)
+                })
+                this.clearAuthCookies(response)
+                throw new UnauthorizedException('토큰이 일치하지 않습니다.')
+            }
+            if(store_token.expires_in < today) {
+                await this.userToken.remove(store_token)
+                this.clearAuthCookies(response)
+                throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.')
+            }
+        } catch (error) {
+            console.error(error);
+            this.clearAuthCookies(response)
+            throw new UnauthorizedException(error.message || '인증 오류 ')
+        }
 
         return false
     }
@@ -50,7 +87,7 @@ export class AuthGuard implements CanActivate {
         return payload;
     }
 
-    private async checkRefreshToken(user_id: number, refreshToken: string) {
+    private async checkRefreshToken(user_id: number, refreshToken: string, response: Response) {
         try {
             const payloadRefreshToken = await this.jwtService.verify(refreshToken, {
                 secret: this.configService.get<string>('JWT_SECRET_KEY'),
@@ -60,12 +97,23 @@ export class AuthGuard implements CanActivate {
             console.error(error);
             if(error.name === 'TokenExpiredError') {
                 await this.userToken.delete({user_id: {user_id: user_id}, token: refreshToken})
-
-                response.clearCookie('user_access_token')
-                response.clearCookie('user_refresh_token')
+                this.clearAuthCookies(response)
                 throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.');
             }
             throw new UnauthorizedException(error.message);
         }
+    }
+
+    private clearAuthCookies(response: Response) {
+        response.clearCookie('user_access_token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict'
+        })
+        response.clearCookie('user_refresh_token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict'
+        })
     }
 }

@@ -1,11 +1,11 @@
 import {Body, Controller, HttpStatus, Post, Res, UseGuards} from "@nestjs/common";
 import {AuthService} from "./auth.service";
-import {AuthGuard} from "./auth.guard";
+import {JwtAuthGuard} from "./auth.guard";
 import {LoginDto} from "./auth.dto";
 import {Response} from "express";
 import {ConfigService} from "@nestjs/config";
 
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('auth')
 export class AuthController {
     constructor(
