@@ -7,10 +7,11 @@ import {RoomParticipantsEntity} from "../entities/room_participants.entity";
 import {UserEntity} from "../entities/user.entity";
 import {ChatLogService} from "./chat_log.service";
 import {ChatLogController} from "./chat_log.controller";
+import { UserTokenEntity } from "src/entities/user_token.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Chat_roomEntity, RoomParticipantsEntity, UserEntity]),
+        TypeOrmModule.forFeature([Chat_roomEntity, RoomParticipantsEntity, UserEntity, UserTokenEntity]),
         MongooseModule.forFeature([{name: ChatLog.name, schema: ChatLogSchema}])],
     providers: [ChatLogService],
     controllers: [ChatLogController],

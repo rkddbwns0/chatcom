@@ -8,6 +8,7 @@ import {Not, Repository} from "typeorm";
 import {Response, response} from "express";
 import {IS_PUBLIC_KEY} from "./decorator/public.decorator";
 import {AuthGuard} from "@nestjs/passport";
+import { Logger } from "@nestjs/common";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivate {
@@ -21,6 +22,8 @@ export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivat
     ) {super()}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
+        const logger = new Logger('JwtAuthGuard');
+
         const isPublic = this.reflector.getAllAndOverride(IS_PUBLIC_KEY, [
             context.getClass(),
             context.getHandler()
@@ -72,7 +75,7 @@ export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivat
                 throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.')
             }
         } catch (error) {
-            console.error(error);
+            logger.error(error.stack);
             this.clearAuthCookies(response)
             throw new UnauthorizedException(error.message || '인증 오류 ')
         }
@@ -94,13 +97,12 @@ export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivat
             })
             return true
         } catch (error) {
-            console.error(error);
             if(error.name === 'TokenExpiredError') {
                 await this.userToken.delete({user_id: {user_id: user_id}, token: refreshToken})
                 this.clearAuthCookies(response)
                 throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.');
             }
-            throw new UnauthorizedException(error.message);
+            throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.');
         }
     }
 

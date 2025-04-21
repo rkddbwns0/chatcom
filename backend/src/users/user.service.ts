@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt'
 import {randomBytes, scrypt, createCipheriv} from 'crypto'
 import {promisify} from 'util'
 import {stringify} from "ts-jest";
+import { LoginDto } from "src/auth/auth.dto";
 
 @Injectable()
 export class UserService {

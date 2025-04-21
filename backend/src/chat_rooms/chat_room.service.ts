@@ -63,4 +63,17 @@ export class ChatRoomService {
         }
     }
 
+    async chatList(room_id: number) {
+        try {
+            const chatList = await this.chat_room.find({
+                where: {room_id: room_id},
+                select: ["room_id", "title", "created_at"],
+                order: {created_at: "ASC"},
+            })
+            return chatList;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 }

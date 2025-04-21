@@ -69,5 +69,15 @@ export class ChatLogService {
         }
     }
 
-    async findAllChatLogs() {}
+    async findAllChatLogs(room_id: number) {
+        try {
+            const chatLogs = await this.chatLog.find({
+                where: {room_id: room_id},
+                order: {created_at: "ASC"},
+            })
+            return chatLogs;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }

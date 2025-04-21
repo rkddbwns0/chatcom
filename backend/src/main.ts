@@ -15,10 +15,10 @@ async function bootstrap() {
   app.use(cookieParser())
 
   const config = new DocumentBuilder()
-      .setTitle('API Documentation')
+      .setTitle('ChatCom API 문서')
       .setDescription('API')
       .setVersion('1.0.0')
-      .addTag('swaager')
+      .addTag('swagger')
       .build()
 
   const documentFactory = SwaggerModule.createDocument(app, config);

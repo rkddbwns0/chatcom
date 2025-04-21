@@ -13,13 +13,9 @@ import {Friends_requestsEntity} from "./entities/friends_requests.entity";
 import {ChatRoomModule} from "./chat_rooms/chat_room.modules";
 import {MongooseModule} from "@nestjs/mongoose";
 import {ChatLogModule} from "./chat_log/chat_log.module";
-import { ChatGateway } from './chat/chat.gateway';
 import {ChatGatewayModule} from "./chat/gateway.module";
 import {UserTokenEntity} from "./entities/user_token.entity";
-import {APP_GUARD} from "@nestjs/core";
-import {JwtAuthGuard} from "./auth/auth.guard";
 import {AuthModule} from "./auth/auth.module";
-import {AuthStrategy} from "./auth/auth.stategy";
 
 @Module({
   imports: [

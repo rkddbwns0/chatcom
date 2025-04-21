@@ -1,4 +1,4 @@
-import {Body, Controller, Post, Res} from "@nestjs/common";
+import {Body, Controller, Get, Post, Query, Res} from "@nestjs/common";
 import {ChatRoomService} from "./chat_room.service";
 import {CreateRoomDto} from "./chat_room.dto";
 import {Response} from "express";
@@ -14,6 +14,17 @@ export class ChatRoomController {
         try {
             const result = await this.chatRoomService.createRoom(createRoomDto);
             res.status(200).json({message: result?.message});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error.message});
+        }
+    }
+
+    @Get('/chat_list')
+    async chatList(@Query('room_id') room_id: number, @Res() res: Response) {
+        try {
+            const result = await this.chatRoomService.chatList(room_id);
+            res.status(200).json(result)
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error.message});
