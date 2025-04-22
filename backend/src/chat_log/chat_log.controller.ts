@@ -1,22 +1,24 @@
-import {Body, Controller, Post, Res, UseGuards} from "@nestjs/common";
+import {Body, Controller, Get, Post, Query, Req, Res, UseGuards} from "@nestjs/common";
 import {ChatLogService} from "./chat_log.service";
-import {CreateChatLogDto} from "./chat_log.dto";
 import {Response} from "express";
 import { JwtAuthGuard } from "src/auth/auth.guard";
+import { Number } from "mongoose";
 
 @UseGuards(JwtAuthGuard)
 @Controller('chat_log')
 export class ChatLogController {
     constructor(private readonly chatLogService: ChatLogService) {}
 
-    @Post('/createChatLog')
-    async createChatLog(@Body() createChatLogDto: CreateChatLogDto, @Res() res: Response) {
+    @Get('/chatList')
+    async getChatList(@Query('room_id') room_id: number, @Res() res: Response, @Req() req) {
+        console.log(room_id)
         try {
-            const result = await this.chatLogService.sendMessage(createChatLogDto);
-            res.status(200).json(result)
-        } catch (e) {
-            console.error(e);
-            res.status(500).json({message: e.message});
+            
+            const list = await this.chatLogService.findAllChatLogs(room_id)
+            res.status(200).json(list)
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: error.message});
         }
     }
 }

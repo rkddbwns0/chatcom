@@ -7,13 +7,15 @@ import {RoomParticipantsEntity} from "../entities/room_participants.entity";
 import {UserEntity} from "../entities/user.entity";
 import {MongooseModule} from "@nestjs/mongoose";
 import {ChatLog, ChatLogSchema} from "../chat_log/schema/chat_log.schema";
+import { WebSocketAuthService } from "./webSocketAuth.service";
+import { UserTokenEntity } from "src/entities/user_token.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Chat_roomEntity, RoomParticipantsEntity, UserEntity]),
+        TypeOrmModule.forFeature([Chat_roomEntity, RoomParticipantsEntity, UserEntity, UserTokenEntity]),
         MongooseModule.forFeature([{name: ChatLog.name, schema: ChatLogSchema}])
     ],
-    providers: [ChatGateway, ChatLogService]
+    providers: [ChatGateway, ChatLogService, WebSocketAuthService]
 })
 
 export class ChatGatewayModule {}

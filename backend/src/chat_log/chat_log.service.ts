@@ -58,6 +58,7 @@ export class ChatLogService {
         try {
             const room = await this.findRoomId(createChatLogDto.room_id);
             const user = await this.findUserId(room!, createChatLogDto.user_id);
+            console.log(createChatLogDto);
 
             createChatLogDto.nickname = user!
 
@@ -72,9 +73,9 @@ export class ChatLogService {
     async findAllChatLogs(room_id: number) {
         try {
             const chatLogs = await this.chatLog.find({
-                where: {room_id: room_id},
-                order: {created_at: "ASC"},
-            })
+                room_id: room_id,
+
+            }).sort({created_at: 1});
             return chatLogs;
         } catch (error) {
             console.log(error);

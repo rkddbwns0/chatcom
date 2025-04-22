@@ -13,6 +13,6 @@ export class UserTokenEntity {
     @Column({type: 'varchar', nullable: false, length: 255})
     token: string;
 
-    @Column({type: 'date', nullable: false})
+    @Column({type: 'timestamp', nullable: false})
     expires_in: Date
 }

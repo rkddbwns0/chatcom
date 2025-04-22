@@ -34,9 +34,9 @@ export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivat
 
         const request = context.switchToHttp().getRequest();
         const response = context.switchToHttp().getResponse();
-        const accessToken = request.cooikes['user_access_token'];
-        const refreshToken = request.cooikes['user_refresh_token'];
-        const user = request.body.user_id|| request.params.user_id;
+        const accessToken = request.cookies['user_access_token'];
+        const refreshToken = request.cookies['user_refresh_token'];
+        const user = request?.body?.user_id|| request?.params?.user_id;
 
         if (!accessToken || !refreshToken) {
             this.clearAuthCookies(response)

@@ -1,7 +1,7 @@
 import {ForbiddenException, Injectable, NotFoundException} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {UserEntity} from "../entities/user.entity";
-import {Repository} from "typeorm";
+import {In, Repository} from "typeorm";
 import {LoginDto} from "./auth.dto";
 import * as bctrypt from 'bcrypt'
 import {JwtService} from "@nestjs/jwt";
@@ -38,7 +38,7 @@ export class AuthService {
             })
             if (!user) {
                 throw new ForbiddenException("존재하지 않는 사용자입니다.");
-            }
+            } 
 
             if (!(await bctrypt.compare(loginDto.password, user.password))) {
                 throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
@@ -73,26 +73,7 @@ export class AuthService {
             }
 
             const refreshToken = this.jwtService.sign(payload, {expiresIn: '7h', secret: this.configService.get<string>('JWT_SECRET_KEY')});
-
-            const user_token = await this.userToken.find({
-                where: {
-                    user_id: user
-                }
-            })
-
-            if (user_token) {
-                const deleteData = user_token.map((token) => {
-                    return token.user_id
-                })
-                await this.userToken.delete({user_id: deleteData});
-                const newToken = this.userToken.create({
-                    user_id: user,
-                    token: refreshToken,
-                    expires_in: new Date(Date.now() + 7 * 60 * 60 * 1000),
-                });
-                await this.userToken.save(newToken)
-            }
-
+            
             const token = this.userToken.create({
                 user_id: user,
                 token: refreshToken,
@@ -106,4 +87,4 @@ export class AuthService {
             console.log(error);
         }
     }
-}
+}  
