@@ -19,6 +19,7 @@ export class AuthStrategy extends PassportStrategy (
             jwtFromRequest: ExtractJwt.fromExtractors([
                 (request) => request?.cookies?.user_access_token
             ])
+            
         });
     }
 
@@ -26,8 +27,10 @@ export class AuthStrategy extends PassportStrategy (
         if (!payload) {
             throw new UnauthorizedException('인증 오류');
         }
+        console.log(payload)
         return {
             user_id: payload.user_id,
+            email: payload.email,
             name: payload.name,
             nickname: payload.nickname
         }

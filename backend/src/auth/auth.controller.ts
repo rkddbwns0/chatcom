@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards} from "@nestjs/common";
+import {Body, Controller, Get, HttpStatus, Post, Req, Res, UnauthorizedException, UseGuards} from "@nestjs/common";
 import {AuthService} from "./auth.service";
 import {JwtAuthGuard} from "./auth.guard";
 import {LoginDto} from "./auth.dto";
@@ -15,24 +15,21 @@ export class AuthController {
     ) {}
 
     @Public()
-    @Post('login')
+    @Post('/login')
     async login(@Body() loginDto: LoginDto, @Res() res: Response) {
         try {
             const login_user = await this.authService.login(loginDto);
 
             res.cookie('user_access_token', login_user.accessToken, {
                 httpOnly: true,
-                secure: true,
                 sameSite: 'strict',
             })
 
             res.cookie('user_refresh_token', login_user.refreshToken, {
                 httpOnly: true,
-                secure: true,
                 sameSite: 'strict',
             })
-
-            res.status(HttpStatus.OK).json({data: login_user});
+            res.status(HttpStatus.OK).json({user: login_user.user});
         } catch (error) {
             console.error(error);
             res.status(500).json({message: "로그인 과정에 오류가 발생하였습니다. 다시 시도해 주세요."})
@@ -54,6 +51,9 @@ export class AuthController {
 
     @Get('/me')
     async me(@Req() req) {
+        if(!req.user) {
+            throw new UnauthorizedException('사용자 정보가 없습니다.')
+        }
        return {
             user_id: req.user.user_id,
             email: req.user.email,

@@ -36,10 +36,10 @@ export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivat
         const response = context.switchToHttp().getResponse();
         const accessToken = request.cookies['user_access_token'];
         const refreshToken = request.cookies['user_refresh_token'];
-        const user = request?.body?.user_id|| request?.params?.user_id;
+        const user = request?.body?.user_id|| request?.params?.user_id || request?.query?.user_id;
 
         if (!accessToken || !refreshToken) {
-            this.clearAuthCookies(response)
+            // this.clearAuthCookies(response)
             throw new UnauthorizedException('로그인이 필요합니다.');
         }
 
@@ -47,7 +47,7 @@ export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivat
         await this.checkRefreshToken(user, refreshToken, response)
 
         if(!(Number(user) === access_payload.user_id)) {
-            this.clearAuthCookies(response)
+            // this.clearAuthCookies(response)
             throw new UnauthorizedException('정보가 일치하지 않습니다.')
         }
 
@@ -66,21 +66,21 @@ export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivat
                     user_id: request.user_id,
                     token: Not(refreshToken)
                 })
-                this.clearAuthCookies(response)
+                // this.clearAuthCookies(response)
                 throw new UnauthorizedException('토큰이 일치하지 않습니다.')
             }
             if(store_token.expires_in < today) {
                 await this.userToken.remove(store_token)
-                this.clearAuthCookies(response)
+                // this.clearAuthCookies(response)
                 throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.')
             }
         } catch (error) {
             logger.error(error.stack);
-            this.clearAuthCookies(response)
+            // this.clearAuthCookies(response)
             throw new UnauthorizedException(error.message || '인증 오류 ')
         }
 
-        return false
+        return true
     }
 
     private async checkAccessToken(accessToken: string) {
@@ -99,7 +99,7 @@ export class JwtAuthGuard extends AuthGuard('jwt-service') implements CanActivat
         } catch (error) {
             if(error.name === 'TokenExpiredError') {
                 await this.userToken.delete({user_id: {user_id: user_id}, token: refreshToken})
-                this.clearAuthCookies(response)
+                // this.clearAuthCookies(response)
                 throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.');
             }
             throw new UnauthorizedException('토큰이 만료되었습니다. 다시 로그인해 주세요.');

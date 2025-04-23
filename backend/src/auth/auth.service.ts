@@ -26,7 +26,7 @@ export class AuthService {
         const accessToken = await this.validateAccessToken(user!);
         const refreshToken = await this.validateRefreshToken(user!);
 
-        return {user, accessToken, refreshToken};
+        return { user: {user_id: user?.user_id, email: user?.email, name: user?.name, nickname: user?.nickname}, accessToken, refreshToken};
     }
 
     private async validateUser(loginDto: LoginDto): Promise<UserEntity | undefined> {
