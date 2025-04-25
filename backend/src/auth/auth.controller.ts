@@ -5,6 +5,7 @@ import {LoginDto} from "./auth.dto";
 import {Response} from "express";
 import {ConfigService} from "@nestjs/config";
 import { Public } from "./decorator/public.decorator";
+import { UserEntity } from "src/entities/user.entity";
 
 @UseGuards(JwtAuthGuard)
 @Controller('auth')
@@ -22,14 +23,17 @@ export class AuthController {
 
             res.cookie('user_access_token', login_user.accessToken, {
                 httpOnly: true,
+                secure: false,
                 sameSite: 'strict',
             })
 
             res.cookie('user_refresh_token', login_user.refreshToken, {
                 httpOnly: true,
+                secure: false,
                 sameSite: 'strict',
             })
             res.status(HttpStatus.OK).json({user: login_user.user});
+            return 
         } catch (error) {
             console.error(error);
             res.status(500).json({message: "로그인 과정에 오류가 발생하였습니다. 다시 시도해 주세요."})
@@ -38,8 +42,9 @@ export class AuthController {
 
     @Public()
     @Post('/logout')
-    async logout(@Res() res: Response) {
+    async logout(@Res() res: Response, @Body() user_id: UserEntity) {
         try {
+            await this.authService.logout(user_id)
             res.clearCookie('user_access_token');
             res.clearCookie('user_refresh_token');
             res.status(HttpStatus.OK).json({message: '로그아웃 완료'})
@@ -55,10 +60,10 @@ export class AuthController {
             throw new UnauthorizedException('사용자 정보가 없습니다.')
         }
        return {
-            user_id: req.user.user_id,
-            email: req.user.email,
-            name: req.user.name,
-            nickname: req.user.nickname,
+        user_id: req.user.user_id,
+        email: req.user.email,
+        name: req.user.name,
+        nickname: req.user.nickname,
        }
     }
 }

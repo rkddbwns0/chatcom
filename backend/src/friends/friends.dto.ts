@@ -11,7 +11,7 @@ export class SendFriendDto {
     @ApiProperty({description: "친구 요청 접수자 아이디", type: 'integer', nullable: false})
     @IsNotEmpty()
     @IsNumber()
-    receiver_id: UserEntity;
+    receiver_id: string;
 }
 
 export class ResponseFriendDto {

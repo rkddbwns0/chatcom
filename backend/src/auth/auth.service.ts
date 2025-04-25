@@ -26,7 +26,14 @@ export class AuthService {
         const accessToken = await this.validateAccessToken(user!);
         const refreshToken = await this.validateRefreshToken(user!);
 
-        return { user: {user_id: user?.user_id, email: user?.email, name: user?.name, nickname: user?.nickname}, accessToken, refreshToken};
+        const userInfo = {
+            user_id: user?.user_id,
+            email: user?.email,
+            name: user?.name,
+            nickname: user?.nickname,
+        }
+
+        return { user: userInfo, accessToken, refreshToken};
     }
 
     private async validateUser(loginDto: LoginDto): Promise<UserEntity | undefined> {
@@ -46,7 +53,7 @@ export class AuthService {
 
             return user;
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -84,7 +91,16 @@ export class AuthService {
             return refreshToken;
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
+        }
+    }
+
+    async logout(user_id: UserEntity) {
+        try {
+            await this.userToken.delete({user_id: user_id})
+            return true
+        } catch (error) {
+            console.error(error);
         }
     }
 }  

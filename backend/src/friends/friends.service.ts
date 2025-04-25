@@ -21,11 +21,24 @@ export class FriendsService {
         private readonly dataSource: DataSource
     ) {}
 
+    async friend_list(user_id: UserEntity) {
+        try {
+            const friend_list = await this.friends.find({
+                where: {user_id: user_id}, 
+                relations: ['friend_id'], 
+                select: ['alias', 'friend_id']
+            })
+            return friend_list
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async sendFreind(sendFriendDto: SendFriendDto) {
         try {
             const send_user = await this.user.findOne({where: {user_id: sendFriendDto.send_id.user_id}})
-            const receiver_user = await this.user.findOne({where: {user_id: sendFriendDto.receiver_id.user_id}})
-            const duplicate_request = await this.friends_requests.findOne({where: {send_id: sendFriendDto.send_id, receiver_id: sendFriendDto.receiver_id}})
+            const receiver_user = await this.user.findOne({where: {email: sendFriendDto.receiver_id}, select: ['user_id']})
+            const duplicate_request = await this.friends_requests.findOne({where: {send_id: sendFriendDto.send_id, receiver_id: receiver_user!}})
             const duplicate_friend = await this.friends.findOne({
                 where: {
                     user_id: sendFriendDto.send_id || sendFriendDto.receiver_id,
@@ -34,25 +47,27 @@ export class FriendsService {
             })
 
             if (!send_user) {
-                throw new BadRequestException('존재하지 않는 유저입니다.')
+                throw new BadRequestException({message: '존재하지 않는 유저입니다.', status: 400})
             }
             if (!receiver_user) {
-                throw new BadRequestException('존재하지 않는 유저입니다. 요청을 보낼 수 없습니다.')
+                throw new BadRequestException({message: '존재하지 않는 유저입니다. 요청을 보낼 수 없습니다.', status: 400})
             }
             if (duplicate_friend) {
-                throw new BadRequestException('이미 친구 상태인 유저입니다.')
+                throw new BadRequestException({message: '이미 친구 상태인 유저입니다.', status: 400})
             }
             if (duplicate_request) {
-                throw new BadRequestException('이미 친구 요청을 보낸 상태입니다.')
+                throw new BadRequestException({message: '이미 친구 요청을 보낸 상태입니다.', status: 400})
             }
 
-            const send_request = this.friends_requests.create(sendFriendDto);
+            const send_request = this.friends_requests.create({
+                send_id: sendFriendDto.send_id,
+                receiver_id: receiver_user,
+            });
             await this.friends_requests.save(send_request);
 
             return {message: '친구 요청을 보냈습니다.'}
         } catch (error) {
-            console.log(error);
-            return {error: error.message}
+            console.error(error);
         }
     }
 
