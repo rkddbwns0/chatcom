@@ -60,10 +60,10 @@ export class AuthController {
             throw new UnauthorizedException('사용자 정보가 없습니다.')
         }
        return {
-        user_id: req.user.user_id,
-        email: req.user.email,
-        name: req.user.name,
-        nickname: req.user.nickname,
+        user_id: req.user.payload.user_id,
+        email: req.user.payload.email,
+        name: req.user.payload.name,
+        nickname: req.user.payload.nickname,
        }
     }
 }

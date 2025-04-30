@@ -5,8 +5,9 @@ import Index from './pages';
 import { useUser } from './context/userContext';
 import axios from 'axios';
 import Home from './pages/home';
-import Cookies from 'js-cookie';
 import { useLocation } from 'react-router';
+import MainLayout from './pages/mainLayout';
+import { ChatRooms } from './pages/chatRooms';
 
 function App() { 
   const context = useUser();
@@ -38,7 +39,10 @@ const AppContent = ({context} : {context: any}) => {
   return (
       <Routes>
         <Route path='/' element={<Index />} />
-        <Route path='/home' element={<Home />} />
+        <Route path='/home' element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path='chatRooms' element={<ChatRooms />} />
+        </Route>
       </Routes>
   );
 }

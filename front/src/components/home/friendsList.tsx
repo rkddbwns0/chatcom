@@ -7,6 +7,7 @@ export const FriendsList = () => {
     const [friends, setFriends] = useState<any>([]);
 
     useEffect(() => {
+        console.log(user)
         const fetchFriends = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/friends/friend_list`, 
@@ -25,7 +26,7 @@ export const FriendsList = () => {
 
     return (
         <div>
-            <h1>FriendsList</h1>
+            <h2>친구 목록</h2>
             {friends.length > 0 ? (
                 friends.map((items: any) => (
                     <div key={items}>

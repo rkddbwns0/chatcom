@@ -1,7 +1,9 @@
+import { useEffect } from "react"
 import { useUser } from "../../context/userContext"
 
 export const Profile = () => {
     const {user} = useUser()
+    
     return (
         <div>
             <div>

@@ -16,15 +16,19 @@ export const FriendReq: React.FC<FriendReqProps> = ({isOpen, onClose}) => {
         console.log(user.user_id)
         try {
             const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/friends/send_request`, 
-                {send_id: user?.user_id, receive_id: email}, 
+                {send_id: user?.user_id, receiver_id: email}, 
                 {withCredentials: true}
             )
+            console.log(response)
             alert(`${response.data.message}`)
+            setEmail('')
             onClose()
         } catch (error) {
             console.error(error)
             const axiosError = error as AxiosError<{message : string}>
             alert(`${axiosError.response?.data?.message}`)
+            setEmail('')
+            onClose()
         }
     }
 

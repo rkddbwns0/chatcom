@@ -6,8 +6,6 @@ import {RoomParticipantsEntity} from "../entities/room_participants.entity";
 import {FriendsEntity} from "../entities/friends.entity";
 import {CreateRoomDto} from "./chat_room.dto";
 import {UserEntity} from "../entities/user.entity";
-import {raw} from "express";
-import {newMangleNameCache} from "@swc/core/binding";
 
 @Injectable()
 export class ChatRoomService {
@@ -63,13 +61,19 @@ export class ChatRoomService {
         }
     }
 
-    async chatList(room_id: number) {
+    async chatList(user_id: number) {
         try {
-            const chatList = await this.chat_room.find({
-                where: {room_id: room_id},
-                select: ["room_id", "title", "created_at"],
-                order: {created_at: "ASC"},
-            })
+            const chatList = await this.roomParticipants
+            .createQueryBuilder('room_participants')
+            .leftJoinAndSelect('room_participants.room_id', 'chat_room')
+            .where('room_participants.user_id = :user_id', {user_id: user_id})
+            .select([
+                'room_participants.room_id as room_id', 
+                'COUNT(room_participants.room_id) as user_count',
+                'chat_room.title as title'
+            ])
+            .groupBy('room_participants.room_id, chat_room.title')
+            .getRawMany();
             return chatList;
         } catch (error) {
             console.log(error);

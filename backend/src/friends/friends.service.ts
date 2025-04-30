@@ -34,10 +34,23 @@ export class FriendsService {
         }
     }
 
+    async request_list(user_id: number) {
+        try {
+            const request_list = await this.friends_requests.find({
+                where: {receiver_id: {user_id: user_id}},
+                relations: ['send_id'],
+            })
+            return request_list
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async sendFreind(sendFriendDto: SendFriendDto) {
         try {
             const send_user = await this.user.findOne({where: {user_id: sendFriendDto.send_id.user_id}})
-            const receiver_user = await this.user.findOne({where: {email: sendFriendDto.receiver_id}, select: ['user_id']})
+            const receiver_user = await this.user.findOne({where: {email: sendFriendDto.receiver_id}})
             const duplicate_request = await this.friends_requests.findOne({where: {send_id: sendFriendDto.send_id, receiver_id: receiver_user!}})
             const duplicate_friend = await this.friends.findOne({
                 where: {
@@ -46,6 +59,9 @@ export class FriendsService {
                 },
             })
 
+            if (send_user?.email === sendFriendDto.receiver_id) {
+                throw new BadRequestException({message: '자기 자신을 친구 요청할 수 없습니다.', status: 400})
+            }
             if (!send_user) {
                 throw new BadRequestException({message: '존재하지 않는 유저입니다.', status: 400})
             }
@@ -67,7 +83,8 @@ export class FriendsService {
 
             return {message: '친구 요청을 보냈습니다.'}
         } catch (error) {
-            console.error(error);
+            console.log(error);
+            throw error;
         }
     }
 
