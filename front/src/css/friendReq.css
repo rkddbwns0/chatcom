@@ -1,0 +1,89 @@
+.friend-req-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+.friend-req-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    height: 30%;
+    z-index: 100;
+    position: fixed;
+    bottom: 50%;
+    top: 30%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);  
+}
+
+.friend-req-header {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 70%;
+}
+
+.friend-req-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.friend-req-close-button {
+    font-size: 20px;
+    font-weight: 600;   
+    cursor: pointer;
+}
+
+.friend-req-input-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.friend-req-input {
+    width: 70%;
+    height: 45px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 0 10px;
+}
+
+.friend-req-button-container {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.friend-req-button {
+    width: 70%;
+    height: 45px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 0 10px;
+    background-color: #017BFF;
+    border: none;
+    outline: none;
+    color: #fff;    
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}

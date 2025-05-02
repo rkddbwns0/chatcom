@@ -1,16 +1,17 @@
-import { useEffect } from "react"
 import { useUser } from "../../context/userContext"
+import "../../css/home.css"
 
 export const Profile = () => {
     const {user} = useUser()
     
     return (
-        <div>
-            <div>
+        <div className="profile">
+            <div className='profile-name'>
                 <h3>{user?.name}</h3>
                 <h3>({user?.nickname})</h3>
             </div>
-            <div>
+            
+            <div className='profile-email'>
                 <h3>{user?.email}</h3>
             </div>
         </div>

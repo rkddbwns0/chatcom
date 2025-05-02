@@ -1,0 +1,147 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+}
+
+.home-header-left {
+    padding: 10px;
+}
+
+.home-header-right {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+}
+
+.home-header-right > a {
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.home-header-right > a:hover {
+    color: #017BFF;
+}
+
+
+.friend-and-chat-options-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+}
+
+.friend-and-chat-options {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+}
+
+.friend-and-chat-options > a {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.friend-and-chat-options > a:hover {
+    color: #017BFF;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px
+}
+
+.profile-name {
+    display: flex;
+    gap: 5px;
+    font-size: 15px;
+    margin-left: 10px;
+}
+
+.profile-email {
+    font-size: 15px;
+}
+
+.friends-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+
+.friends-list-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.friend-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 80px;
+    gap: 10px;
+}
+
+.friend-item:hover {
+    background-color: #e7ebee;
+}
+
+.friend-name {
+    font-size: 15px;
+    margin-left: 10px;
+}
+
+.friend-email {
+    font-size: 15px;    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

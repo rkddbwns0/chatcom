@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import "../../css/req_list.css"
 
 export const RequestList: React.FC<{isOpen: boolean, onClose: () => void}> = ({isOpen, onClose}) => {
 
@@ -32,30 +33,34 @@ export const RequestList: React.FC<{isOpen: boolean, onClose: () => void}> = ({i
 
 
     return (
-        <div>
-           {requestList.length > 0 ? (
-            requestList.map((item: any) => (
-                <div key={item}>
-                    <div>
-                        <h3>친구 요청</h3>
-                        <a onClick={onClose}>X</a>
+        <div onClick={onClose} className="request-list-overlay">
+            <div className="request-list-container" onClick={(e) => e.stopPropagation()}>
+            {requestList.length > 0 ? (
+                requestList.map((item: any) => (
+                    <div key={item} className="request-list-item">
+                        <div className="request-list-item-header">
+                            <h3 className="request-list-item-header-title">친구 요청</h3>
+                            <a onClick={onClose} className="request-list-item-close-button">X</a>
+                        </div>
+                        <div className="request-list-item-content">
+                            <h3>{item.alias}({item.email})</h3>
+                            <h3>님이 친구 요청을 보냈습니다.</h3>
+                        </div>
+                        <div className="request-list-item-button-container">
+                            <button className="request-list-item-button">수락</button>
+                            <button className="request-list-item-button">거절</button>
+                        </div>
                     </div>
-                    <div>
-                        <h3>{item.alias}({item.email})</h3>
-                        <h3>님이 친구 요청을 보냈습니다.</h3>
+                ))
+            ) : (
+                <div className="request-list-item-empty">
+                    <div className="request-list-item-empty-close-button-container">
+                        <a onClick={onClose} className="request-list-item-empty-close-button">X</a>
                     </div>
-                    <div>
-                        <button>수락</button>
-                        <button>거절</button>
-                    </div>
+                    <h3 className="request-list-item-empty-title">현재 친구 요청이 없습니다.</h3>
                 </div>
-            ))
-           ) : (
-            <div>
-                <h3>친구 요청이 없습니다.</h3>
-                <a onClick={onClose}>X</a>
-            </div>
-           )}
+            )}
+           </div>
         </div>
     )
 }

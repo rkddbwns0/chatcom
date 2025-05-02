@@ -12,7 +12,6 @@ import {CreateChatLogDto} from "../chat_log/chat_log.dto";
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { WebSocketAuthService } from './webSocketAuth.service';
-import { UnauthorizedException } from '@nestjs/common';
 
 @WebSocketGateway({cors: true})
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {

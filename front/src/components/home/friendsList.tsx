@@ -1,13 +1,12 @@
 import axios from "axios"
-import { useUser } from "../../context/userContext"
 import { useEffect, useState } from "react"
+import "../../css/home.css"
 
 export const FriendsList = () => {
     const user = JSON.parse(localStorage.getItem('user') || '{}')
     const [friends, setFriends] = useState<any>([]);
 
     useEffect(() => {
-        console.log(user)
         const fetchFriends = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/friends/friend_list`, 
@@ -25,12 +24,13 @@ export const FriendsList = () => {
     }, [])
 
     return (
-        <div>
-            <h2>친구 목록</h2>
+        <div className="friends-list">
+            <h2 className="friends-list-title">친구 목록</h2>
             {friends.length > 0 ? (
                 friends.map((items: any) => (
-                    <div key={items}>
-                        <h3>{items.alias}</h3>
+                    <div key={items} className="friend-item">
+                        <h3 className="friend-name">{items.alias}</h3>
+                        <h3 className="friend-email">({items.friend_id.email})</h3>
                     </div>
                 ))
             ) : (

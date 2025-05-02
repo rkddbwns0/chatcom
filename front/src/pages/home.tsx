@@ -5,6 +5,7 @@ import { useUser } from "../context/userContext";
 import { Profile } from "../components/home/profile";
 import { FriendsList } from "../components/home/friendsList";
 import { FriendAndChatOptions } from "../components/home/friendAndChatOptions";
+import "../css/home.css";
 
 const Home = () => {
     const navigate = useNavigate()
@@ -20,19 +21,24 @@ const Home = () => {
     }
     
     return (
-        <div>
-            <div>
-                <h1>ChatCom</h1>
-                <a>마이페이지</a>
-                <a onClick={handleLogout}>로그아웃</a>
+        <div className="home-container">
+            <div className="home-header">
+                <div className="home-header-left">
+                    <h2>ChatCom</h2>
+                </div>
+                
+                <div className="home-header-right">
+                    <a onClick={() => navigate('/mypage')}>마이페이지</a>
+                    <a onClick={handleLogout}>로그아웃</a>
+                </div>
             </div>
-            <div>
+            <div className="friend-and-chat-options-container">
                 <FriendAndChatOptions />
             </div>
-            <div>
+            <div className="profile-container">
                 <Profile />
             </div>
-            <div>
+            <div className="friends-list-container">
                 <FriendsList />
             </div>
         </div>

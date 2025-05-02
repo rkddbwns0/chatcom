@@ -30,6 +30,7 @@ const AppContent = ({context} : {context: any}) => {
         localStorage.setItem('user', JSON.stringify(response.data));
       } catch (error) {
         console.log(error);
+        localStorage.removeItem('user');
         navigate('/')
       }
     }
