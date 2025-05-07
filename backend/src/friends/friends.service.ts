@@ -22,15 +22,25 @@ export class FriendsService {
   ) {}
 
   async friend_list(user_id: UserEntity) {
-    console.log(user_id);
     try {
-      const friend_list = await this.friends.find({
-        where: { user_id: user_id },
-        relations: ['user_id', 'friend_id'],
-        select: ['alias', 'friend_id'],
-        order: { alias: 'ASC' },
-      });
-      console.log(friend_list);
+      const friend_list = await this.friends
+        .createQueryBuilder('friends')
+        .leftJoin('friends.user_id', 'user')
+        .leftJoin('friends.friend_id', 'friend')
+        .where('friends.user_id = :user_id', { user_id })
+        .andWhere('friends.friend_id != friends.user_id')
+        .select([
+          'user.email AS user_email',
+          'user.name AS user_name',
+          'user.nickname AS user_nickname',
+          'friend.user_id AS friend_user_id',
+          'friend.email AS friend_email',
+          'friend.name AS friend_name',
+          'friend.nickname AS friend_nickname',
+          'friends.alias AS friend_alias',
+        ])
+        .getRawMany();
+
       return friend_list;
     } catch (error) {
       console.log(error);
