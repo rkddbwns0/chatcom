@@ -1,0 +1,65 @@
+.rooms-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.rooms-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 60%;
+    height: 80vh;
+    border: 0.5px solid black;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.room-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 85px;
+    cursor: pointer;
+    border-bottom: 0.5px solid rgb(223, 217, 217);
+    gap: 10px;
+}
+
+.room-item:hover {
+    background-color: rgb(238, 238, 238);
+}
+
+.room-image {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 0.5px solid rgb(223, 217, 217);
+    margin-left: 20px;
+}
+
+.room-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.room-title {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.room-message {
+    font-size: 12px;
+    color: rgb(100, 100, 100);
+    line-height: 20px;
+}

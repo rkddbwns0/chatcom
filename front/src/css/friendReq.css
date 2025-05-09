@@ -13,7 +13,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 30%;
+    width: 45%;
     height: 30%;
     z-index: 100;
     position: fixed;
@@ -24,7 +24,7 @@
     margin: 0 auto;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);  
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }
 
 .friend-req-header {
@@ -43,7 +43,7 @@
 
 .friend-req-close-button {
     font-size: 20px;
-    font-weight: 600;   
+    font-weight: 600;
     cursor: pointer;
 }
 
@@ -79,10 +79,10 @@
     border: 1px solid #000;
     border-radius: 5px;
     padding: 0 10px;
-    background-color: #017BFF;
+    background-color: #017bff;
     border: none;
     outline: none;
-    color: #fff;    
+    color: #fff;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;

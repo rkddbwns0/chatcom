@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -42,10 +47,16 @@ export class JwtAuthGuard
     const accessToken = request.cookies['user_access_token'];
     const refreshToken = request.cookies['user_refresh_token'];
 
+    if (!accessToken || !refreshToken) {
+      this.clearAuthCookies(response);
+      throw new UnauthorizedException('사용자 정보가 없습니다.');
+    }
+
     const access_payload = await this.checkAccessToken(
       accessToken,
       refreshToken,
     );
+
     if (access_payload?.newAccessToken) {
       response.clearCookie('user_access_token', {
         httpOnly: true,
@@ -65,15 +76,9 @@ export class JwtAuthGuard
       response,
     );
 
-    if (!accessToken || !refreshToken) {
-      this.clearAuthCookies(response);
-      return response.redirect('/');
-    }
-
-
     if (!(access_payload && access_payload?.payload.user_id)) {
-      this.clearAuthCookies(response);                 
-      response.redirect('/');
+      this.clearAuthCookies(response);
+      throw new UnauthorizedException('사용자 정보가 없습니다.');
     }
     request.user = access_payload;
 
@@ -91,17 +96,17 @@ export class JwtAuthGuard
           token: Not(refreshToken),
         });
         this.clearAuthCookies(response);
-        return response.redirect('/');
+        throw new UnauthorizedException('토큰이 존재하지 않습니다.');
       }
       if (store_token.expires_in < today) {
         await this.userToken.remove(store_token);
         this.clearAuthCookies(response);
-        return response.redirect('/');
+        throw new UnauthorizedException('토큰이 만료되었습니다.');
       }
     } catch (error) {
       logger.error(error.stack);
       this.clearAuthCookies(response);
-      return response.redirect('/');
+      throw new UnauthorizedException('인증 오류입니다.');
     }
 
     return true;
@@ -112,7 +117,7 @@ export class JwtAuthGuard
       const payload = await this.jwtService.verify(accessToken, {
         secret: this.configService.get<string>('JWT_SECRET_KEY'),
       });
-      return {payload};
+      return { payload };
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
         const payload = await this.jwtService.verify(refreshToken, {
@@ -131,8 +136,8 @@ export class JwtAuthGuard
             expiresIn: '1h',
           },
         );
-        console.log('accessToken을 재발급 하였습니다.')
-        return {payload, newAccessToken};
+        console.log('accessToken을 재발급 하였습니다.');
+        return { payload, newAccessToken };
       }
     }
   }
@@ -154,9 +159,9 @@ export class JwtAuthGuard
           token: refreshToken,
         });
         this.clearAuthCookies(response);
-        return response.redirect('/');
+        throw new UnauthorizedException('토큰이 만료되었습니다.');
       }
-      return response.redirect('/');
+      throw new UnauthorizedException('인증 오류입니다.');
     }
   }
 

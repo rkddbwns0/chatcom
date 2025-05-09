@@ -5,22 +5,25 @@ import '../../css/home.css';
 export const FriendsList = () => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const [friends, setFriends] = useState<any>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!user?.user_id) return;
         const fetchFriends = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/friends/friend_list`, {
-                    params: { user_id: user?.user_id },
+                    params: { user_id: user.user_id },
                     withCredentials: true,
                 });
-                console.log(response.data);
                 setFriends(response.data.data);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchFriends();
-    }, []);
+    }, [user?.user_id]);
 
     return (
         <div className="friends-list">

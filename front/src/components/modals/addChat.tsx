@@ -40,6 +40,7 @@ export const AddChat: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
     };
 
     useEffect(() => {
+        if (!user?.user_id) return;
         const fetchFriendList = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/friends/friend_list`, {
@@ -52,7 +53,7 @@ export const AddChat: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
             }
         };
         fetchFriendList();
-    }, []);
+    }, [user?.user_id]);
 
     if (!isOpen) {
         return null;
