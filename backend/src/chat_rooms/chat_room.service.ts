@@ -115,10 +115,17 @@ export class ChatRoomService {
 
       const list_map = chatList.map((chat) => chat.room_id);
 
-      const chatLog = await this.chatLog.find({
-        where: { room_id: In(list_map) },
-        order: { created_at: -1 },
-      });
+      const chatLog = await this.chatLog.aggregate([
+        { $match: { room_id: { $in: list_map } } },
+        { $sort: { created_at: -1 } },
+        {
+          $group: {
+            _id: '$room_id',
+            chatLog: { $first: '$$ROOT' },
+          },
+        },
+      ]);
+      console.log(chatLog);
       return { chatList: chatList, chatLog: chatLog };
     } catch (error) {
       console.log(error);

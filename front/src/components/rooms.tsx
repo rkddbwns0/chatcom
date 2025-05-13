@@ -18,9 +18,8 @@ export const Rooms = () => {
                     },
                     withCredentials: true,
                 });
-                console.log(response.data);
                 setChatRooms(response.data.chatList);
-                setLastMessage(response.data.lastMessage);
+                setLastMessage(response.data.chatLog);
             } catch (error) {
                 console.error(error);
             }
@@ -29,13 +28,11 @@ export const Rooms = () => {
     }, []);
 
     const mergedChatRooms = chatRooms.map((room: any) => {
-        const lastMsg = Array.isArray(lastMessage)
-            ? lastMessage.find((msg: any) => msg.room_id === room.room_id)
-            : null;
+        const lastMsg = lastMessage.find((item: any) => Number(item.chatLog.room_id) === room.room_id);
         return {
             ...room,
-            lastMessage: lastMsg?.message || null,
-            lastMessageTime: lastMsg?.timestamp || null,
+            lastMessage: lastMsg?.chatLog.message || null,
+            lastMessageTime: lastMsg?.chatLog.timestamp || null,
         };
     });
 

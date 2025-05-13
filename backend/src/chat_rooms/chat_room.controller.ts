@@ -31,7 +31,6 @@ export class ChatRoomController {
   async chatList(@Query('user_id') user_id: number) {
     try {
       const result = await this.chatRoomService.chatList(user_id);
-      console.log(result);
       return result;
     } catch (error) {
       console.log(error);

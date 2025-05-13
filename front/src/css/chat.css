@@ -1,0 +1,110 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 50%;
+    height: 98vh;
+    border: 0.5px solid black;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.chat-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 60px;
+    border-bottom: 0.5px solid rgb(223, 217, 217);
+}
+
+.chat-header-back {
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.chat-title-text {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.chat-content {
+    display: flex;
+    height: 80vh;
+    border-bottom: 0.5px solid rgb(223, 217, 217);
+}
+
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+.chat-input {
+    flex: 1;
+    height: 100%;
+    outline: none;
+    padding: 5px;
+    font-size: 13px;
+    border: none;
+    resize: none;
+    outline: none;
+    min-height: 45px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 15px;
+    scrollbar-gutter: stable;
+    margin-right: 10px;
+}
+
+.chat-send-button {
+    border: none;
+    cursor: pointer;
+    width: 65px;
+    height: 30px;
+    background-color: #017bff;
+    color: #fff;
+    font-size: 13px;
+}
+
+.chat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-message {
+    display: flex;
+}
+
+.chat-message-right-container {
+    margin-left: auto; /* 오른쪽 정렬 */
+    max-width: 70%;
+}
+.chat-message-left-container {
+    margin-right: auto; /* 왼쪽 정렬 */
+    max-width: 70%;
+}
+
+.chat-message-right {
+    background-color: #8fc5ff; /* 내 메시지 색 */
+    padding: 10px;
+    border-radius: 10px;
+    text-align: left;
+    margin-right: 20px;
+}
+
+.chat-message-left {
+    background-color: #d9d9d9; /* 왼쪽 메시지 색 */
+    padding: 10px;
+    border-radius: 10px;
+    text-align: left;
+    margin-left: 20px;
+}

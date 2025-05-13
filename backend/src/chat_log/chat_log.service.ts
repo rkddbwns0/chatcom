@@ -39,8 +39,6 @@ export class ChatLogService {
         throw new BadRequestException('존재하지 않는 채팅방입니다.');
       }
 
-      console.log(roomId.room_id);
-
       return roomId?.room_id;
     } catch (error) {
       console.log(error);
